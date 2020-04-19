@@ -7,7 +7,11 @@
     </v-row>
     <v-row class="pa my-4 justify-center">
       <v-col>
-        <MenuItemCard />
+        <MenuItemCard
+          v-for="items in MenuItems"
+          :key="items.id"
+          :MenuItem="items"
+        />
       </v-col>
     </v-row>
   </v-container>
@@ -15,11 +19,27 @@
 
 <script>
 import MenuItemCard from "@/components/MenuItemCard.vue";
+import AxiosService from "@/services/AxiosService.js";
 
 export default {
   components: {
-    MenuItemCard
-  }
+    MenuItemCard,
+  },
+  data() {
+    return {
+      MenuItems: [],
+    };
+  },
+  created() {
+    AxiosService.getMenuItems()
+      .then((response) => {
+        this.MenuItems = response.data;
+        console.log("There was an error:", response.data);
+      })
+      .catch((error) => {
+        console.log("There was an error:", error.response);
+      });
+  },
 };
 </script>
 
